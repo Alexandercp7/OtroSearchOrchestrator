@@ -5,7 +5,7 @@ export class WatchlistItem {
   readonly userId: string;
   readonly productUrl: string;
   readonly store: string;
-  readonly name: string;
+  readonly title: string;
   readonly addedAt: Date;
 
   constructor(
@@ -13,7 +13,7 @@ export class WatchlistItem {
     userId: string,
     productUrl: string,
     store: string,
-    name: string,
+    title: string,
     addedAt: Date,
   ) {
     if (!productUrl) {
@@ -23,7 +23,7 @@ export class WatchlistItem {
     this.userId = userId;
     this.productUrl = productUrl;
     this.store = store;
-    this.name = name;
+    this.title = title;
     this.addedAt = addedAt;
   }
 }

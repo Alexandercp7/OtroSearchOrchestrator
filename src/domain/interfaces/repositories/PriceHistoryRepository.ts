@@ -6,6 +6,6 @@ export interface PriceHistoryRepository {
     saveSnapshot(snapshot: PriceSnapshot): Promise<void>;
     getHistory(productUrl: string, daterange: DateRange): Promise<PriceSnapshot[]>;
     getLatest(productUrl: string): Promise<PriceSnapshot | null>;
-    getMinPrice(productUrl: string, daterange: DateRange): Promise<Money | null>;
-    getMaxPrice(productUrl: string, daterange: DateRange): Promise<Money | null>;
+    getMin(productUrl: string, daterange: DateRange): Promise<Money | null>;
+    getMax(productUrl: string, daterange: DateRange): Promise<Money | null>;
 }

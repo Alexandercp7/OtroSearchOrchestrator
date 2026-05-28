@@ -3,37 +3,38 @@ import {InvalidWeights} from "../exceptions/SearchErrors";
 const EPSILON = 0.001;
 
 export class SearchWeights {
-    readonly priceWeight: number;
-    readonly deliveryWeight: number;
-    readonly inStockWeight: number;
-    readonly msiWeight: number;
+    readonly price: number;
+    readonly stock: number;
+    readonly delivery: number;
+    readonly msi: number;
 
-    constructor(priceWeight: number, deliveryWeight: number, inStockWeight: number, msiWeight: number) {
-        this.assertRange(priceWeight, "priceWeight");
-        this.assertRange(deliveryWeight, "deliveryWeight");
-        this.assertRange(inStockWeight, "inStockWeight");
-        this.assertRange(msiWeight, "msiWeight");
+    constructor(price: number, stock: number, delivery: number, msi: number) {
+        this.assertRange(price, "price");
+        this.assertRange(stock, "stock");
+        this.assertRange(delivery, "delivery");
+        this.assertRange(msi, "msi");
 
-        const sum = priceWeight + deliveryWeight + inStockWeight + msiWeight;
+        const sum = price + stock + delivery + msi;
         if(Math.abs(sum - 1) > EPSILON){
             throw new InvalidWeights(`Weights must sum to 1, got ${sum}`);
         }
-        this.priceWeight = priceWeight;
-        this.deliveryWeight = deliveryWeight;
-        this.inStockWeight = inStockWeight;
-        this.msiWeight = msiWeight;
+        this.price = price;
+        this.stock = stock;
+        this.delivery = delivery;
+        this.msi = msi;
     }
+
     static balanced(): SearchWeights {
         return new SearchWeights(0.25, 0.25, 0.25, 0.25);
     }
 
     static priceFocused(): SearchWeights {
-        return new SearchWeights(0.5, 0.2, 0.2, 0.1);
+        return new SearchWeights(0.7, 0.1, 0.1, 0.1);
     }
-    
-  toCacheKey(): string {
-    return `${this.priceWeight}:${this.inStockWeight}:${this.deliveryWeight}:${this.msiWeight}`;
-  }
+
+    toCacheKey(): string {
+        return `${this.price}:${this.stock}:${this.delivery}:${this.msi}`;
+    }
 
     private assertRange(value: number, name: string): void {
         if(Number.isNaN(value) || value < 0 || value > 1){

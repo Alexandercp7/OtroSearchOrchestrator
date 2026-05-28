@@ -1,4 +1,5 @@
-import { Product, InvalidProduct } from '../domain/entities/Product';
+import { Product } from '../domain/entities/Product';
+import { InvalidProduct } from '../domain/exceptions/SearchErrors';
 import { Money } from '../domain/valueObjects/Money';
 import { DomainError } from '../domain/exceptions/DomainError';
 

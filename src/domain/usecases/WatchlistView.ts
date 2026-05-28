@@ -10,14 +10,14 @@ export class WatchlistView {
 
     async list(userId: string): Promise<WatchlistItemView[]> {
         const items = await this.watchlist.findByUserId(userId);
-        
+
         return Promise.all(
             items.map(async (item) => {
                 const latestSnapshot = await this.history.getLatest(item.productUrl);
-                return{
+                return {
                     id: item.id,
                     productUrl: item.productUrl,
-                    name: item.name,
+                    title: item.title,
                     store: item.store,
                     addedAt: item.addedAt,
                     currentPrice: latestSnapshot ? latestSnapshot.price : null

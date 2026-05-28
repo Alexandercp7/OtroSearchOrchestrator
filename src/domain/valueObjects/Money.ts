@@ -10,14 +10,15 @@ export class Money {
     constructor(amount: Decimal | number | string, currency: string) {
         const value = amount instanceof Decimal ? amount : new Decimal(amount);
 
-        if(value.isNegative()){
-            throw new InvalidMoney(`Amount cannot be negative ${value.toString()}`);
+        if(value.isNaN() || value.isNegative()){
+            throw new InvalidMoney(`Amount must be a non-negative number, got ${amount}`);
         }
-        if(!currency || currency.length !== 3){
-            throw new InvalidMoney(`Currency must be a 3-letter code, got "${currency}"`);
+        const normalized = currency ? currency.toUpperCase() : '';
+        if (!normalized || normalized.length !== 3 || !/^[A-Z]{3}$/.test(normalized)) {
+            throw new InvalidMoney(`Currency must be a 3-letter alphabetic code, got "${currency}"`);
         }
         this.amount = value;
-        this.currency = currency;
+        this.currency = normalized;
     }
     
     

@@ -4,7 +4,7 @@ export interface WatchlistItemView {
   id: string;
   productUrl: string;
   store: string;
-  name: string;
+  title: string;
   addedAt: Date;
   currentPrice: Money | null;
 }

@@ -14,6 +14,11 @@ import { DateRange } from '../domain/valueObjects/DateRange';
 const price = new Money(1000, 'MXN');
 const productUrl = 'https://amazon.com/monitor';
 
+class FakeIdGenerator {
+  private count = 0;
+  generate(): string { return `id-${++this.count}`; }
+}
+
 // Fakes
 class FakeWatchlistRepo {
   saved: WatchlistItem[] = [];
@@ -37,7 +42,7 @@ class FakeWatchlistRepo {
     return this.items.find(i => i.id === id) ?? null;
   }
 
-  async findByUser(userId: string): Promise<WatchlistItem[]> {
+  async findByUserId(userId: string): Promise<WatchlistItem[]> {
     return this.items.filter(i => i.userId === userId);
   }
 
@@ -72,6 +77,10 @@ class FakeHistoryRepo {
   }
 
   async getMin(productUrl: string, range: DateRange): Promise<Money | null> {
+    return null;
+  }
+
+  async getMax(productUrl: string, range: DateRange): Promise<Money | null> {
     return null;
   }
 }
@@ -147,7 +156,7 @@ describe('Grupo 3 — WatchlistAddition', () => {
     const repo = new FakeWatchlistRepo();
     const history = new FakeHistoryRepo();
     const storeMap = new Map([['amazon', new FakeStore('amazon', makeRaw())]]);
-    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer());
+    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer(), new FakeIdGenerator());
 
     const item = await uc.add({ userId: 'u1', productUrl, store: 'amazon' });
     expect(item.title).toBe('Test Monitor');
@@ -160,7 +169,7 @@ describe('Grupo 3 — WatchlistAddition', () => {
     const repo = new FakeWatchlistRepo();
     const history = new FakeHistoryRepo();
     const storeMap = new Map([['amazon', new FakeStore('amazon', makeRaw())]]);
-    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer());
+    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer(), new FakeIdGenerator());
 
     await uc.add({ userId: 'u1', productUrl, store: 'amazon' });
     await expect(uc.add({ userId: 'u1', productUrl, store: 'amazon' })).rejects.toThrow(ItemAlreadyTracked);
@@ -170,7 +179,7 @@ describe('Grupo 3 — WatchlistAddition', () => {
     const repo = new FakeWatchlistRepo();
     const history = new FakeHistoryRepo();
     const storeMap = new Map<string, FakeStore>();
-    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer());
+    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer(), new FakeIdGenerator());
     await expect(uc.add({ userId: 'u1', productUrl, store: 'unknown' })).rejects.toThrow(UnknownStore);
   });
 
@@ -178,7 +187,7 @@ describe('Grupo 3 — WatchlistAddition', () => {
     const repo = new FakeWatchlistRepo();
     const history = new FakeHistoryRepo();
     const storeMap = new Map([['amazon', new FakeStore('amazon', null)]]);
-    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer());
+    const uc = new WatchlistAddition(repo, history, storeMap, new FakeNormalizer(), new FakeIdGenerator());
     await expect(uc.add({ userId: 'u1', productUrl, store: 'amazon' })).rejects.toThrow(ProductNotFound);
   });
 });

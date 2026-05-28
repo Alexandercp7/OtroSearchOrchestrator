@@ -1,4 +1,5 @@
-import { RankedProduct, InvalidScore } from '../domain/valueObjects/RankedProduct';
+import { RankedProduct } from '../domain/valueObjects/RankedProduct';
+import { InvalidScore } from '../domain/exceptions/SearchErrors';
 import { Money } from '../domain/valueObjects/Money';
 import { DomainError } from '../domain/exceptions/DomainError';
 

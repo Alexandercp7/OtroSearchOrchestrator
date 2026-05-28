@@ -83,6 +83,10 @@ class FakeHistoryRepo {
     const v = this.minMap.get(productUrl);
     return v === undefined ? null : v;
   }
+
+  async getMax(_productUrl: string, _range: DateRange): Promise<Money | null> {
+    return null;
+  }
 }
 
 class FakeUserRepo {

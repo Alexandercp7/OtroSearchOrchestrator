@@ -56,7 +56,7 @@ class FakeNormalizer {
 
 class FakeRanker {
   rank(products: Product[], _weights: SearchWeights): RankedProduct[] {
-    return products.map((p, i) => makeRanked(p.name, 0.9 - i * 0.1));
+    return products.map((p, i) => makeRanked(p.title, 0.9 - i * 0.1));
   }
 }
 

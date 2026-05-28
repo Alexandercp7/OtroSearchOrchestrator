@@ -3,7 +3,7 @@ import { Money } from "../valueObjects/Money";
 
 export class Product {
     readonly id: string;
-    readonly name: string;
+    readonly title: string;
     readonly price: Money;
     readonly store: string;
     readonly url: string;
@@ -13,7 +13,7 @@ export class Product {
 
     constructor(
         id: string,
-        name: string,
+        title: string,
         price: Money,
         store: string,
         url: string,
@@ -28,7 +28,7 @@ export class Product {
             throw new InvalidProduct("MSI cannot be negative");
         }
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.price = price;
         this.store = store;
         this.url = url;

@@ -35,6 +35,10 @@ class FakeHistoryRepo {
   async getMin(_url: string, _range: DateRange): Promise<Money | null> {
     return null;
   }
+
+  async getMax(_url: string, _range: DateRange): Promise<Money | null> {
+    return null;
+  }
 }
 
 class FakeWatchlistRepo {
@@ -49,7 +53,7 @@ class FakeWatchlistRepo {
   }
 
   async findById(_id: string): Promise<WatchlistItem | null> { return null; }
-  async findByUser(_userId: string): Promise<WatchlistItem[]> { return []; }
+  async findByUserId(_userId: string): Promise<WatchlistItem[]> { return []; }
   async exists(_userId: string, _productUrl: string): Promise<boolean> { return false; }
   async save(_item: WatchlistItem): Promise<void> {}
   async remove(_id: string): Promise<void> {}
