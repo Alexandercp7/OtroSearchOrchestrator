@@ -9,7 +9,7 @@ export interface TokenPayload {
 }
 
 export interface TokenGateway {
-    generateTokens(payload: TokenPayload): Promise<TokenPair>;
+    createTokens(payload: TokenPayload): Promise<TokenPair>;
     verifyAccessToken(token: string): Promise<TokenPayload>;
-    verifyRefreshToken(token: string): Promise<TokenPayload>;
+    refreshTokens(refreshToken: string): Promise<TokenPair>;
 }

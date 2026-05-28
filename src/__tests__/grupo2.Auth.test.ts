@@ -4,6 +4,7 @@ import { TokenRefresh } from '../domain/usecases/TokenRefresh';
 import { User } from '../domain/entities/User';
 import { Email } from '../domain/valueObjects/Email';
 import { asPasswordHash } from '../domain/valueObjects/PasswordHash';
+import { DisplayName } from '../domain/valueObjects/DisplayName';
 import { UserAlreadyExists, InvalidCredentials } from '../domain/exceptions/UserErrors';
 import { TokenPair, TokenPayload } from '../domain/interfaces/gateways/TokenGateway';
 
@@ -44,7 +45,7 @@ class FakeAuthGateway {
     return { userId: 'user', email: 'user@example.com' };
   }
 
-  async refresh(refreshToken: string): Promise<TokenPair> {
+  async refreshTokens(refreshToken: string): Promise<TokenPair> {
     return {
       accessToken: `new-at-${refreshToken}`,
       refreshToken: `new-rt-${refreshToken}`,
@@ -64,6 +65,12 @@ class FakePasswordGateway {
   }
 }
 
+class FakeIdGenerator {
+  generate(): string {
+    return 'generated-id';
+  }
+}
+
 class FakeTokenGateway {
   async createTokens(payload: TokenPayload): Promise<TokenPair> {
     return {
@@ -76,7 +83,7 @@ class FakeTokenGateway {
     return { userId: 'user', email: 'user@example.com' };
   }
 
-  async refresh(refreshToken: string): Promise<TokenPair> {
+  async refreshTokens(refreshToken: string): Promise<TokenPair> {
     return {
       accessToken: `new-at-${refreshToken}`,
       refreshToken: `new-rt-${refreshToken}`,
@@ -88,8 +95,8 @@ describe('Grupo 2 — UserRegistration', () => {
   it('registers new user and returns tokens', async () => {
     const repo = new FakeUserRepo();
     const auth = new FakeAuthGateway();
-    const uc = new UserRegistration(repo, auth, auth);
-    const result = await uc.register({ email: 'user@example.com', password: 'secret' });
+    const uc = new UserRegistration(repo, auth, auth, new FakeIdGenerator());
+    const result = await uc.register({ email: 'user@example.com', name: 'Username1', password: 'secret' });
     expect(result.userId).toBeTruthy();
     expect(result.accessToken).toContain('access-');
     expect(result.refreshToken).toContain('refresh-');
@@ -98,9 +105,9 @@ describe('Grupo 2 — UserRegistration', () => {
   it('throws UserAlreadyExists on second registration with same email', async () => {
     const repo = new FakeUserRepo();
     const auth = new FakeAuthGateway();
-    const uc = new UserRegistration(repo, auth, auth);
-    await uc.register({ email: 'user@example.com', password: 'secret' });
-    await expect(uc.register({ email: 'user@example.com', password: 'secret' })).rejects.toThrow(UserAlreadyExists);
+    const uc = new UserRegistration(repo, auth, auth, new FakeIdGenerator());
+    await uc.register({ email: 'user@example.com', name: 'Username1', password: 'secret' });
+    await expect(uc.register({ email: 'user@example.com', name: 'Username1', password: 'secret' })).rejects.toThrow(UserAlreadyExists);
   });
 });
 
@@ -108,7 +115,8 @@ describe('Grupo 2 — UserLogin', () => {
   async function setupUser(repo: FakeUserRepo) {
     const email = new Email('user@example.com');
     const hash = asPasswordHash('$2b$10$aaaaaaaaaaaaaaaaaaaa1');
-    const user = new User('user-1', email, hash, new Date());
+    const displayName = new DisplayName('Username1');
+    const user = new User('user-1', email, hash, new Date(), displayName);
     await repo.save(user);
     return user;
   }
