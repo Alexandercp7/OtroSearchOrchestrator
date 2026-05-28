@@ -1,4 +1,5 @@
 import { TokenGateway } from '../../domain/interfaces/gateways/TokenGateway';
+import { Store } from '../../domain/interfaces/stores/Store';
 import { AlertCreation } from '../../domain/usecases/AlertCreation';
 import { AlertListing } from '../../domain/usecases/AlertListing';
 import { AlertRemoval } from '../../domain/usecases/AlertRemoval';
@@ -24,7 +25,6 @@ import { BcryptPasswordGateway } from '../security/BcryptPasswordGateway';
 import { JwtTokenGateway } from '../security/JwtTokenGateway';
 import { AmazonMxStore } from '../stores/AmazonMxStore';
 import { MercadoLibreStore } from '../stores/MercadoLibreStore';
-import { HttpClient } from '../stores/http/HttpClient';
 
 export interface AppContainer {
   tokenGateway:           TokenGateway;
@@ -60,10 +60,10 @@ export function buildContainer(): AppContainer {
   const ranker     = new WeightedRankStrategy();
   const cache      = new InMemorySearchCache();
 
-  const mlStore  = new MercadoLibreStore(new HttpClient('https://api.mercadolibre.com'));
-  const amzStore = new AmazonMxStore(new HttpClient('https://www.amazon.com.mx'));
-  const storeList = [mlStore, amzStore];
-  const storeMap  = new Map([
+  const mlStore  = new MercadoLibreStore();
+  const amzStore = new AmazonMxStore();
+  const storeList: Store[] = [mlStore, amzStore];
+  const storeMap  = new Map<string, Store>([
     [mlStore.name,  mlStore],
     [amzStore.name, amzStore],
   ]);
