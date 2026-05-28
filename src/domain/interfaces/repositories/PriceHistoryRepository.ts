@@ -5,7 +5,7 @@ import { Money } from "../../valueObjects/Money";
 export interface PriceHistoryRepository {
     saveSnapshot(snapshot: PriceSnapshot): Promise<void>;
     getHistory(productUrl: string, daterange: DateRange): Promise<PriceSnapshot[]>;
-    getLatestPrice(productUrl: string): Promise<Money | null>;
+    getLatest(productUrl: string): Promise<PriceSnapshot | null>;
     getMinPrice(productUrl: string, daterange: DateRange): Promise<Money | null>;
     getMaxPrice(productUrl: string, daterange: DateRange): Promise<Money | null>;
 }

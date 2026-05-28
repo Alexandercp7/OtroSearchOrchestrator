@@ -1,4 +1,4 @@
-import { RankedProduct } from './RankedProduct';
+import { RankedProduct } from '../../valueObjects/RankedProduct';
 
 export interface SearchResponse {
   query: string;

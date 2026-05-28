@@ -2,7 +2,7 @@ import { ProductSearch } from '../domain/usecases/ProductSearch';
 import { SearchWeights } from '../domain/valueObjects/SearchWeights';
 import { Money } from '../domain/valueObjects/Money';
 import { Product } from '../domain/entities/Product';
-import { RankedProduct } from '../domain/dtos/search/RankedProduct';
+import { RankedProduct } from '../domain/valueObjects/RankedProduct';
 import { AllStoresFailed } from '../domain/exceptions/SearchErrors';
 import { RawProduct } from '../domain/dtos/search/RawProduct';
 import { SearchResponse } from '../domain/dtos/search/SearchResponse';

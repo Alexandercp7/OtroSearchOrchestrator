@@ -1,5 +1,5 @@
 import { Product } from '../../entities/Product';
-import { RankedProduct } from '../../dtos/search/RankedProduct';
+import { RankedProduct } from '../../valueObjects/RankedProduct';
 import { SearchWeights } from '../../valueObjects/SearchWeights';
 
 export interface RankStrategy {

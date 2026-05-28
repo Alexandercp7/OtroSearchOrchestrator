@@ -43,6 +43,6 @@ export class ProductSearch {
   }
 
   private buildCacheKey({ query, weights }: SearchRequest): string {
-    return `search:${query}:${weights.deliveryWeight}:${weights.inStockWeight}:${weights.msiWeight}:${weights.priceWeight}`;
+    return `search:${query}:${weights.toCacheKey()}`;
   }
 }

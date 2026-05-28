@@ -30,6 +30,10 @@ export class SearchWeights {
     static priceFocused(): SearchWeights {
         return new SearchWeights(0.5, 0.2, 0.2, 0.1);
     }
+    
+  toCacheKey(): string {
+    return `${this.priceWeight}:${this.inStockWeight}:${this.deliveryWeight}:${this.msiWeight}`;
+  }
 
     private assertRange(value: number, name: string): void {
         if(Number.isNaN(value) || value < 0 || value > 1){
