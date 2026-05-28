@@ -5,7 +5,7 @@ import { HttpClient } from './http/HttpClient';
 export class AmazonMxStore implements Store {
   readonly name = 'amazon';
 
-  private readonly http = new HttpClient('https://www.amazon.com.mx');
+  constructor(private readonly http: HttpClient) {}
 
   async search(query: string): Promise<RawProduct[]> {
     throw new Error('Not implemented');

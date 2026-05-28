@@ -1,3 +1,4 @@
+import { TokenGateway } from '../../domain/interfaces/gateways/TokenGateway';
 import { AlertCreation } from '../../domain/usecases/AlertCreation';
 import { AlertListing } from '../../domain/usecases/AlertListing';
 import { AlertRemoval } from '../../domain/usecases/AlertRemoval';
@@ -23,8 +24,10 @@ import { BcryptPasswordGateway } from '../security/BcryptPasswordGateway';
 import { JwtTokenGateway } from '../security/JwtTokenGateway';
 import { AmazonMxStore } from '../stores/AmazonMxStore';
 import { MercadoLibreStore } from '../stores/MercadoLibreStore';
+import { HttpClient } from '../stores/http/HttpClient';
 
 export interface AppContainer {
+  tokenGateway:           TokenGateway;
   userLogin:              UserLogin;
   userRegistration:       UserRegistration;
   tokenRefresh:           TokenRefresh;
@@ -41,10 +44,10 @@ export interface AppContainer {
 export function buildContainer(): AppContainer {
   const db = getConnection();
 
-  const userRepo     = new MysqlUserRepository(db);
-  const alertRepo    = new MysqlAlertRepository(db);
+  const userRepo      = new MysqlUserRepository(db);
+  const alertRepo     = new MysqlAlertRepository(db);
   const watchlistRepo = new MysqlWatchlistRepository(db);
-  const historyRepo  = new MysqlPriceHistoryRepository(db);
+  const historyRepo   = new MysqlPriceHistoryRepository(db);
 
   const passwordGw = new BcryptPasswordGateway();
   const tokenGw    = new JwtTokenGateway(
@@ -53,12 +56,12 @@ export function buildContainer(): AppContainer {
   );
   const idGen = new UuidGenerator();
 
-  const normalizer = new RegexNormalizer();
+  const normalizer = new RegexNormalizer(idGen);
   const ranker     = new WeightedRankStrategy();
   const cache      = new InMemorySearchCache();
 
-  const mlStore  = new MercadoLibreStore();
-  const amzStore = new AmazonMxStore();
+  const mlStore  = new MercadoLibreStore(new HttpClient('https://api.mercadolibre.com'));
+  const amzStore = new AmazonMxStore(new HttpClient('https://www.amazon.com.mx'));
   const storeList = [mlStore, amzStore];
   const storeMap  = new Map([
     [mlStore.name,  mlStore],
@@ -66,6 +69,7 @@ export function buildContainer(): AppContainer {
   ]);
 
   return {
+    tokenGateway:          tokenGw,
     userLogin:             new UserLogin(userRepo, passwordGw, tokenGw),
     userRegistration:      new UserRegistration(userRepo, passwordGw, tokenGw, idGen),
     tokenRefresh:          new TokenRefresh(tokenGw),

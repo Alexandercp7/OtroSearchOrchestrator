@@ -3,11 +3,12 @@ import { SearchResponse } from '../../domain/dtos/search/SearchResponse';
 import { SearchCache } from '../../domain/interfaces/services/SearchCache';
 
 export class RedisSearchCache implements SearchCache {
-  private readonly client: RedisClientType;
+  private constructor(private readonly client: RedisClientType) {}
 
-  constructor(url: string = process.env.REDIS_URL ?? 'redis://localhost:6379') {
-    this.client = createClient({ url }) as RedisClientType;
-    this.client.connect();
+  static async create(url: string = process.env.REDIS_URL ?? 'redis://localhost:6379'): Promise<RedisSearchCache> {
+    const client = createClient({ url }) as RedisClientType;
+    await client.connect();
+    return new RedisSearchCache(client);
   }
 
   async get(key: string): Promise<SearchResponse | null> {

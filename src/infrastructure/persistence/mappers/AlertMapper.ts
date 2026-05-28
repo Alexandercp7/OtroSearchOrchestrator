@@ -57,10 +57,13 @@ export class AlertMapper {
     if (raw['kind'] === 'PriceAtMin') {
       return { kind: 'PriceAtMin', lookbackDays: raw['lookbackDays'] as number };
     }
-    return {
-      kind:        'PriceDropPct',
-      percent:     raw['percent'] as number,
-      lookbackDays: raw['lookbackDays'] as number,
-    };
+    if (raw['kind'] === 'PriceDropPct') {
+      return {
+        kind:         'PriceDropPct',
+        percent:      raw['percent'] as number,
+        lookbackDays: raw['lookbackDays'] as number,
+      };
+    }
+    throw new Error(`Unknown AlertCondition kind in DB: "${raw['kind']}"`);
   }
 }

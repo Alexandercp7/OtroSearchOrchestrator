@@ -1,9 +1,9 @@
 import { Router } from 'express';
+import { TokenGateway } from '../../domain/interfaces/gateways/TokenGateway';
 import { AppContainer } from '../../infrastructure/container/Container';
-import { JwtTokenGateway } from '../../infrastructure/security/JwtTokenGateway';
 import { AuthRequest, makeAuthGuard } from '../middleware/authGuard';
 
-export function watchlistRoutes(container: AppContainer, tokens: JwtTokenGateway): Router {
+export function watchlistRoutes(container: AppContainer, tokens: TokenGateway): Router {
   const router = Router();
   const guard  = makeAuthGuard(tokens);
 

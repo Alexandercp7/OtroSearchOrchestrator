@@ -1,16 +1,19 @@
 import { Product } from '../../domain/entities/Product';
 import { RawProduct } from '../../domain/dtos/search/RawProduct';
+import { IdGenerator } from '../../domain/interfaces/gateways/IdGenerator';
 import { Normalizer } from '../../domain/interfaces/services/Normalizer';
 import { Money } from '../../domain/valueObjects/Money';
 
 export class RegexNormalizer implements Normalizer {
+  constructor(private readonly ids: IdGenerator) {}
+
   normalize(raw: RawProduct): Product {
     const price        = this.parsePrice(raw.priceText, raw.currency);
     const inStock      = this.parseStock(raw.inStockText);
     const deliveryDays = this.parseDelivery(raw.deliveryText);
     const msi          = this.parseMsi(raw.msiText);
 
-    return new Product(raw.url, raw.title, price, raw.store, raw.url, inStock, deliveryDays, msi);
+    return new Product(this.ids.generate(), raw.title, price, raw.store, raw.url, inStock, deliveryDays, msi);
   }
 
   private parsePrice(text: string, currency: string): Money {

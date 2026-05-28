@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { AppContainer } from '../../infrastructure/container/Container';
+import { TokenGateway } from '../../domain/interfaces/gateways/TokenGateway';
 import { SearchWeights } from '../../domain/valueObjects/SearchWeights';
+import { AppContainer } from '../../infrastructure/container/Container';
 import { AuthRequest, makeAuthGuard } from '../middleware/authGuard';
-import { JwtTokenGateway } from '../../infrastructure/security/JwtTokenGateway';
 
-export function searchRoutes(container: AppContainer, tokens: JwtTokenGateway): Router {
+export function searchRoutes(container: AppContainer, tokens: TokenGateway): Router {
   const router = Router();
   const guard  = makeAuthGuard(tokens);
 

@@ -1,6 +1,5 @@
 import express from 'express';
 import { buildContainer } from '../infrastructure/container/Container';
-import { JwtTokenGateway } from '../infrastructure/security/JwtTokenGateway';
 import { errorHandler } from './middleware/errorHandler';
 import { alertRoutes } from './routes/alerts.routes';
 import { authRoutes } from './routes/auth.routes';
@@ -10,10 +9,7 @@ import { watchlistRoutes } from './routes/watchlist.routes';
 export function createServer() {
   const app       = express();
   const container = buildContainer();
-  const tokens    = new JwtTokenGateway(
-    process.env.JWT_SECRET!,
-    process.env.JWT_REFRESH_SECRET!,
-  );
+  const tokens    = container.tokenGateway;
 
   app.use(express.json());
 

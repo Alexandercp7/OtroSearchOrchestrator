@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
-import { JwtTokenGateway } from '../../infrastructure/security/JwtTokenGateway';
+import { TokenGateway } from '../../domain/interfaces/gateways/TokenGateway';
 
 export interface AuthRequest extends Request {
   userId: string;
   userEmail: string;
 }
 
-export function makeAuthGuard(tokens: JwtTokenGateway) {
+export function makeAuthGuard(tokens: TokenGateway) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const header = req.headers.authorization;
     if (!header?.startsWith('Bearer ')) {
