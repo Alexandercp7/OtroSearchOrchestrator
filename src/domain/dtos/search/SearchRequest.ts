@@ -1,6 +1,6 @@
-import { SearchWeights } from "../../valueObjects/SearchWeights";
+import { SearchWeights } from '../../valueObjects/SearchWeights';
 
 export interface SearchRequest {
-    query: string;
-    weights: SearchWeights;
+  query: string;
+  weights: SearchWeights;
 }
