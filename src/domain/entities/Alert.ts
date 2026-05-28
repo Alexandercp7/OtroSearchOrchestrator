@@ -2,14 +2,14 @@ import { AlertCondition } from "../valueObjects/AlertCondition";
 import { InvalidProductUrl } from "../exceptions/SearchErrors";
 
 export class Alert{
-    readonly id: String;
-    readonly userId: String;
+    readonly id: string;
+    readonly userId: string;
     readonly productUrl: string;
     readonly condition: AlertCondition;
     readonly active: boolean;
     readonly lastTriggeredAt: Date | null;
 
-    constructor(id: String, userId: String, productUrl: string, condition: AlertCondition, active: boolean, lastTriggeredAt : Date | null){
+    constructor(id: string, userId: string, productUrl: string, condition: AlertCondition, active: boolean, lastTriggeredAt : Date | null){
         if(!productUrl){
             throw new InvalidProductUrl(productUrl);
         }

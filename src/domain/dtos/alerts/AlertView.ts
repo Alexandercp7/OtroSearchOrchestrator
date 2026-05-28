@@ -1,6 +1,6 @@
 import { AlertCondition } from "../../valueObjects/AlertCondition";
 
-export interface AlertRequest {
+export interface AlertView {
     id: string;
     productUrl: string;
     condition: AlertCondition;
